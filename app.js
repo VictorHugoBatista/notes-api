@@ -1,11 +1,17 @@
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const express = require('express');
+const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 
-var notesRouter = require('./routes/notes');
+require('dotenv').config();
+mongoose.connect(process.env.DATABASE_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
-var app = express();
+const notesRouter = require('./routes/notes');
+
+const app = express();
 
 app.use(logger('dev'));
 app.use(express.json());
