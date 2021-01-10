@@ -15,4 +15,25 @@ router.get('/:noteId', (req, res) => {
   res.send(req.params.noteId);
 });
 
+/**
+ * Add new note.
+ */
+router.post('/', function (req, res) {
+  res.send(req.body);
+});
+
+/**
+ * Edit note by id.
+ */
+router.patch('/:noteId', function (req, res) {
+  res.send(req.body);
+});
+
+/**
+ * Remove note by id.
+ */
+router.delete('/:noteId', function (req, res) {
+  res.send(req.params.noteId);
+});
+
 module.exports = router;
