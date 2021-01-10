@@ -14,8 +14,9 @@ router.get('/', async (_, res) => {
 /**
  * Get note by id.
  */
-router.get('/:noteId', (req, res) => {
-  res.send(req.params.noteId);
+router.get('/:noteId', async (req, res) => {
+  const note = await Note.findById(req.params.noteId);
+  res.send(note);
 });
 
 /**
