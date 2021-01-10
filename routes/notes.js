@@ -6,8 +6,9 @@ const Note = require('../models/note');
 /**
  * List all notes.
  */
-router.get('/', (_, res) => {
-  res.send(['note1', 'note2']);
+router.get('/', async (_, res) => {
+  const notes = await Note.find();
+  res.send(notes);
 });
 
 /**
