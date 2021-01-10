@@ -20,21 +20,24 @@ router.get('/:noteId', (req, res) => {
 /**
  * Add new note.
  */
-router.post('/', function (req, res) {
-  res.send(req.body);
+router.post('/', async (req, res) => {
+  const note = new Note();
+  note.title = req.body.title;
+  note.body = req.body.body;
+  note.save();
 });
 
 /**
  * Edit note by id.
  */
-router.patch('/:noteId', function (req, res) {
+router.patch('/:noteId', (req, res) => {
   res.send(req.body);
 });
 
 /**
  * Remove note by id.
  */
-router.delete('/:noteId', function (req, res) {
+router.delete('/:noteId', (req, res) => {
   res.send(req.params.noteId);
 });
 

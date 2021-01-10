@@ -6,6 +6,7 @@ const logger = require('morgan');
 require('dotenv').config();
 mongoose.connect(process.env.DATABASE_URL, {
   useNewUrlParser: true,
+  useUnifiedTopology: true,
 });
 
 const notesRouter = require('./routes/notes');
