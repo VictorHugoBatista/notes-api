@@ -17,17 +17,27 @@ NoteSchema.plugin(mongoosePaginate);
 
 NoteSchema.statics.list = function (q, page, limit) {
     const qRegex = new RegExp(q, 'i');
-    const query = '' !== q ?
-        {
+    let query = {};
+    let pagination = {
+        limit: 100,
+    };
+
+    if ('' !== q) {
+        query = {
             $or: [
                 {title: qRegex},
                 {body: qRegex},
             ],
-        } : {};
-    const pagination = 0 < page && 0 < limit ? {
-        page: page,
-        limit: limit,
-    } : {limit: 100};
+        };
+    }
+
+    if (0 < page && 0 < limit) {
+        pagination = {
+            page: page,
+            limit: limit,
+        };
+    }
+
     return this.model('Note').paginate(query, pagination);
 };
 
