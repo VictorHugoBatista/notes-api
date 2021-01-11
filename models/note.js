@@ -24,7 +24,11 @@ NoteSchema.statics.list = function (q, page, limit) {
                 {body: qRegex},
             ],
         } : {};
-    return this.model('Note').paginate(query, {page: page, limit: limit});
+    const pagination = 0 < page && 0 < limit ? {
+        page: page,
+        limit: limit,
+    } : {limit: 100};
+    return this.model('Note').paginate(query, pagination);
 };
 
 module.exports = mongose.model('Note', NoteSchema);
