@@ -7,19 +7,10 @@ const Note = require('../models/note');
  * List all notes.
  */
 router.get('/', async (req, res) => {
-  const page = req.query.page ? parseInt(req.query.page) : 1;
+  const q = req.query.q || '';
+  const page = req.query.page ? parseInt(req.query.page) : 0;
   const limit = req.query.limit ? parseInt(req.query.limit) : 10;
-  const qRegex = new RegExp(req.query.q, 'i');
-  const query = req.query.q ?
-    {
-      $or: [
-        {title: qRegex},
-        {body: qRegex},
-      ],
-    } : {};
-  const notes = 0 < page ?
-    await Note.paginate(query, {page: page, limit: limit}) :
-    await Note.find(query);
+  const notes = await Note.list(q, page, limit);
   res.send(notes);
 });
 

@@ -15,4 +15,16 @@ const NoteSchema = new Schema({
 
 NoteSchema.plugin(mongoosePaginate);
 
+NoteSchema.statics.list = function (q, page, limit) {
+    const qRegex = new RegExp(q, 'i');
+    const query = '' !== q ?
+        {
+            $or: [
+                {title: qRegex},
+                {body: qRegex},
+            ],
+        } : {};
+    return this.model('Note').paginate(query, {page: page, limit: limit});
+};
+
 module.exports = mongose.model('Note', NoteSchema);
