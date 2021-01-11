@@ -9,8 +9,14 @@ const Note = require('../models/note');
 router.get('/', async (req, res) => {
   const page = req.query.page ? parseInt(req.query.page) : 1;
   const limit = req.query.limit ? parseInt(req.query.limit) : 10;
+  const qRegex = new RegExp(req.query.q, 'i');
   const query = req.query.q ?
-    {body: new RegExp(req.query.q, 'i')} : {};
+    {
+      $or: [
+        {title: qRegex},
+        {body: qRegex},
+      ],
+    } : {};
   const notes = 0 < page ?
     await Note.paginate(query, {page: page, limit: limit}) :
     await Note.find(query);
