@@ -6,8 +6,11 @@ const Note = require('../models/note');
 /**
  * List all notes.
  */
-router.get('/', async (_, res) => {
-  const notes = await Note.find();
+router.get('/', async (req, res) => {
+  const q = req.query.q || '';
+  const page = req.query.page ? parseInt(req.query.page) : 0;
+  const limit = req.query.limit ? parseInt(req.query.limit) : 10;
+  const notes = await Note.list(q, page, limit);
   res.send(notes);
 });
 
