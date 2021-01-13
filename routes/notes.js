@@ -1,4 +1,5 @@
 const express = require('express');
+const { check, oneOf, validationResult } = require('express-validator');
 const router = express.Router();
 
 const Note = require('../models/note');
@@ -25,13 +26,25 @@ router.get('/:noteId', async (req, res) => {
 /**
  * Add new note.
  */
-router.post('/', async (req, res) => {
-  const note = new Note();
-  note.title = req.body.title;
-  note.body = req.body.body;
-  const result = await note.save();
-  res.send(result);
-});
+router.post(
+  '/',
+  oneOf([
+    check('title').exists(),
+    check('body').exists(),
+  ]),
+  async (req, res) => {
+    try {
+      validationResult(req).throw();
+      const note = new Note();
+      note.title = req.body.title;
+      note.body = req.body.body;
+      const result = await note.save();
+      res.send(result);
+    } catch (error) {
+      res.status(400).json({error});
+    }
+  }
+);
 
 /**
  * Edit note by id.
