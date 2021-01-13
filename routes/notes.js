@@ -28,10 +28,10 @@ router.get('/:noteId', async (req, res) => {
  */
 router.post(
   '/',
-  oneOf([
+  [
     check('title').exists(),
     check('body').exists(),
-  ]),
+  ],
   async (req, res) => {
     try {
       validationResult(req).throw();
