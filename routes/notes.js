@@ -43,24 +43,40 @@ router.post(
     } catch (error) {
       res.status(400).json({error});
     }
-  }
+  },
 );
 
 /**
  * Edit note by id.
  */
-router.patch('/:noteId', async (req, res) => {
-  const result = await Note.updateOne(
-    {_id: req.params.noteId},
-    {
-      $set: {
-        title: req.body.title,
-        body: req.body.body,
-      },
+router.patch(
+  '/:noteId',
+  oneOf([
+    check('title').exists(),
+    check('body').exists(),
+  ]),
+  async (req, res) => {
+    try {
+      validationResult(req).throw();
+      const objectSet = {};
+      if ('undefined' !== typeof req.body.title) {
+        objectSet.title = req.body.title;
+      }
+      if ('undefined' !== typeof req.body.body) {
+        objectSet.body = req.body.body;
+      }
+      const result = await Note.updateOne(
+        {_id: req.params.noteId},
+        {
+          $set: objectSet,
+        }
+      );
+      res.send(result);
+    } catch (error) {
+      res.status(400).json({error});
     }
-  );
-  res.send(result);
-});
+  },
+);
 
 /**
  * Remove note by id.
